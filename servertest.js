@@ -38,11 +38,11 @@ app.post('/add-student-hardcoded', async (req, res) => {
         const student = new Student({
             name: "kareem",
             age: 20,
-            level: "2rd year",
+            level: "2nd year",
             address: "ismailia"
         });
         await student.save();
-        res.send('Hardcoded student added successfully:)');
+        res.send('student added successfully:)');
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -54,6 +54,25 @@ app.post('/add-student', async (req, res) => {
         const student = new Student(req.body);
         await student.save();
         res.send('Student added successfully:)');
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Update Student Name
+app.put('/update-student-name', async (req, res) => {
+    const oldName = req.query.oldName;
+    const newName = req.query.newName;
+
+    try {
+        const student = await Student.findOne({ name: oldName });
+        if (!student) {
+            res.send('Student not found :(');
+        } else {
+            student.name = newName;
+            await student.save();
+            res.send('Student name updated:)');
+        }
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -149,3 +168,15 @@ app.get('/all', async (req, res) => {
 app.listen(3000, () => {
     console.log('server now is opened:)');
 });
+
+
+
+
+
+
+
+//POST http://localhost:3000/add-student-hardcoded
+//POST http://localhost:3000/add-student
+//PUT http://localhost:3000/update-student-name?oldName=kareem&newName=Ali
+// GET http://localhost:3000/students
+//DELETE http://localhost:3000/delete-student?name=Ali
